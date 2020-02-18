@@ -1,0 +1,56 @@
+Firebase:
+
+Prerecs: JavaScript, HTML, & HTTP & Network
+
+FireBase can be used from any frontend
+
+Why firebase? 
+
+- it's a NoSQL database
+- Proven, been around for a long time and handles massive amounts of data
+- it's realtime
+- Great Development story
+- Extremely Versitile - it'll work with any front end or back end
+	because it exposes a rest api you can use it
+
+Agenda: 
+
+NoSQL 
+
+FireBase Essentials
+
+Management Console
+
+Understanding Data
+
+Data Design
+
+Create an Account
+---------------------
+
+NoSQL - Any datastore that isn't a relational database
+	Generally better at scaling and spread over mult machines
+	Drawback: Eventual Consistency - The part of the db wasn't aware of an order being
+
+NoSQL Categories:
+
+Key/Value store (firebase)
+Document Db - nested key values (mongodb)
+Column - a big single table (Casandra)
+graph dbs - (neo4j)
+
+Firebase Essentials:
+-It's a key/value, but looks alot like a doc db
+-It's hosted for you, low maintenance, you don't have to install or manage it or buy hardware.
+-URL-oriented - each piece of data is accessible at a specific unique ULR which corresponds to the location of the data in you r FireBase store. THink of it as a large tree or a JSON graph
+-Real-Time: Fast & Convenient
+-Integrated Authentication - w/ Several Options (like fb and google)
+
+
+Understanding Data
+====================
+-Arrays don't work in firebase like they do in JavaScript
+-Firebase has unique generated keys. To delete you have to use the unique key
+
+With Firebase you're data is a big tree
+
