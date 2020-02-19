@@ -1,0 +1,43 @@
+How to create a localhost and interact with the Firebase Database
+
+*********
+Open a blank folder (name it anything you'd like)
+
+open powershell or git bash in that folder's location and type:
+
+$ npm install -g firebase-tools
+
+//This will install the node_modules and package-lock.json files. It may take a few minutes
+
+//Sign in to Google:
+
+$ firebase login
+
+//Initiate your project: You will be asked a series of questions on the command line
+
+$ firebase init
+
+// Select Y for Yes
+
+//You will then be asked which firebase CLI features you would like for your folder. -Database,-Firestore,-Hosting,-Storage,-Emulators. You can select them all (be sure to select Firestore and Hosting)
+
+//You will then be asked to select an option: The default is "Use an existing project" hit enter and select the "my-shopping-list-71329
+
+//Based on CLI features it will walk you though whihc files to set up. You can hit Enter through them all for their default files.
+
+//You will be asked if you want to install dependencies wiht npm now. 
+
+//Select Y for yes and hit enter, and answer in the affirmative (yes) until it reads Firebase initialization Complete!
+
+****************************
+
+You can now type in the terminal: 
+firebase serve 
+
+//This will open a localhost for you . You edit th index.html and add any js or css files to the Public folder and any edits you make will be updated once you releod the page.
+
+
+
+
+
+
