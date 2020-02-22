@@ -1,0 +1,23 @@
+Login User Story:
+
+Precondition: email id is mapped in database.
+
+Result: 
+
+* When user will login using email id and password, homepage will be displayed with list of items selected by the user.
+
+* I will be using basic firebase authentication for phase1.
+
+Delete User story:
+
+Precondition:
+
+* User is able to successfully login in to the application.
+* User can see their list of items in required sorted order followed by delete icon.
+
+Result:
+
+* When the user is on items page and clicks on delete icon, the delete flag in database will be reset to true and the items will be removed from UI display.
+
+
+
