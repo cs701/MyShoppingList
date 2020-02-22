@@ -1,0 +1,18 @@
+Ryan Burns' User Story
+
+The database hase been created in Google's cloud firestore. 
+I've created two collections:
+  1. users
+      >Priority
+      >Product
+      >Quantity
+      >UID
+      >deleted
+      >purchased
+  2. userlists
+      >email
+      >name
+      >state
+
+I am working on getting a user to store the shopping list from the client side. 
+It will work by a user entering their credentials and store their items in a user list.
