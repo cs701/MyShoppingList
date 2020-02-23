@@ -1,4 +1,3 @@
-/*
 // Google authentication
 document.addEventListener("DOMContentLoaded", event => {
 
@@ -19,7 +18,57 @@ function googleLogin() {
     .catch(console.log)
 
 }
-*/
+
+function login(){
+  var email = document.getElementById("email").value;
+  var password = document.getElementById("password").value;
+// firebase.auth().signInWithEmailAndPassword(email, password) 
+// .then(function(firebaseUser) {
+//   // Success 
+//   console.log("inisde success..");
+// })
+// .catch(function(error) {
+//   // Handle Errors here.
+//   var errorCode = error.code;
+//   var errorMessage = error.message;
+//   // ...
+//   alert(errorCode);
+// });
+
+firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
+  // [END createwithemail]
+  // callSomeFunction(); Optional
+  // var user = firebase.auth().currentUser;
+  user.updateProfile({
+      displayName: username
+  }).then(function() {
+      // Update successful.
+  }, function(error) {
+      // An error happened.
+  });        
+}, function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // [START_EXCLUDE]
+  if (errorCode == 'auth/weak-password') {
+      alert('The password is too weak.');
+  } else {
+      console.error(error);
+  }
+  // [END_EXCLUDE]
+});
+
+}
+
+function signOut(){
+  firebase.auth().signOut().then(function() {
+    // Sign-out successful.
+  }).catch(function(error) {
+    // An error happened.
+  });
+}
+
 
 document.addEventListener("DOMContentLoaded", event => {
 
@@ -32,16 +81,14 @@ document.addEventListener("DOMContentLoaded", event => {
 
   myPost.onSnapshot(doc => {
     const data = doc.data();
-    document.write( data.title + `<br>`)
-    document.write( data.views + `<br>` )
+    console.log(data);
   })
 
 
   myPost.get()
   .then(doc => {
     const data = doc.data();
-    document.write( data.title + `<br>`)
-    document.write( data.views )
+    console.log(data);
   })
   
 });
