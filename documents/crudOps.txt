@@ -1,0 +1,59 @@
+CRUD Operations when interacting with Cloud Firestore:
+
+1. Add the firestore feature to your index.html file:
+<script defer src="/__/firebase/7.8.1/firebase-firestore.js"></script>
+
+2. The following are basic CRUD operations that will interact "My Shopping List" db:
+
+document.addEventListener("DOMContentLoaded", event => {
+
+  const db = firebase.firestore();
+
+  //CREATE: 
+
+  db.collection("users").doc().set({
+    name: "Colleen",
+    email: "colleen@email.com",
+    state: "HI"
+  })
+  .then(() => {
+    document.write(`Success!`);
+  })
+  .catch(() => {
+    document.write(`Something went wrong`);
+  });
+
+});
+
+//READ:
+
+//UPDATE: 
+  //completely replacing an existing document using set():
+   db.collection("users").doc("GALcNMggpN8YYxgxXTCH").set({
+     name: "Marky Mark",
+     email: "MM@email.com",
+     state: "UT"
+     })
+    .then(() => {
+     document.write(`Success!`);
+    })
+    .catch(() => {
+     document.write(`Something went wrong`);
+   });
+
+  //update (override) one or more fields rather than replacing the whole doc
+  db.collection("users").doc("GALcNMggpN8YYxgxXTCH").set({
+    name: "Marky Mark",
+    email: "MarkyMarks@email.com",
+  }, 
+    { merge: true }) // The second argument to set() which will prevent overwriting the entire document if other fields exist
+  .then(() => {
+    document.write(`Override Success!`);
+  })
+  .catch(() => {
+    document.write(`Something went wrong`);
+  });
+
+
+//DELETE
+
