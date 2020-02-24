@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Gugi|Lobster|News+Cycle|Ubuntu" rel="stylesheet">
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+        crossorigin="anonymous"></script>
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>-->
+    <title>Shopping List</title>
+    <style>
+        body {
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+
+
+        h1 {
+            font-family: 'Lobster', cursive;
+            font-size: 65px;
+            text-align: center;
+        }
+
+        #map {
+            height: 600px;
+        }
+
+        #input_limit {
+            width: 100px;
+        }
+
+        .resultlist {
+            border: 1px solid lightgray;
+            border-radius: 25px;
+            width: 400px;
+            float: left;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .resultlist b {
+            font-weight: 900;
+            color: sienna;
+        }
+
+        #resultimg {
+            border-radius: 10px;
+        }
+
+        #yelpicon {
+            width: 12%;
+            height: 12%;
+        }
+
+        body form {
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="theBody">
+
+
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="itemName">&ensp;&ensp;&ensp;Item Name:&ensp;</label>
+                <input type="text" name="itemName" id="itemName" value="" class="form-control"
+                    placeholder="Item you need to buy">
+            </div>
+            <div class="form-group">
+                <label for="quantity">&ensp;&ensp;&ensp;Quantity:&ensp;</label>
+                <input type="text" class="form-control" name="quantity" id="quantity" value="" placeholder="1, 2, 3..">
+            </div>
+            <div class="form-group">
+                <label for="user">&ensp;&ensp;&ensp;User:&ensp;</label>
+                <input type="text" class="form-control" id="user" name="user" value="">&ensp;&ensp;&ensp;
+            </div>
+            <label for="priority">Priority:&ensp;</label>
+            <select id="priority" name="priority">
+                <option value="" style="display: none"></option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+
+            &ensp;&ensp;&ensp;<button type="button" class="btn btn-primary" id="btn">Add</button>
+        </form><br><br>
+    </div>
+
+    <div class="container" style="padding-left: 30px;padding-right: 30px">
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="results">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"
+        integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        function isInteger(obj) {
+            return typeof obj === 'number' && obj % 1 === 0;
+        }
+
+        $("#btn").click(function () {
+            var itemName = $("#itemName").val();
+            var qty = $("#quantity").val();
+            var userName = $("#user").val();
+            var prior = parseInt($("#priority").val());
+
+            $.ajax({
+                url: 'http://127.0.0.1:3000/addItem',
+                type: 'put',
+                data: {
+                    itemName: itemName,
+                    quantity: qty,
+                    userName: userName,
+                    priority: prior
+                },
+                success: function (rs) {
+                    console.log(rs);
+                    $("#results").empty();
+                    $.each(rs, function (i, item) {
+                        if (item.item_status == 0) {
+                            $("#results").append('<p>' + item.item_name + ' <span>' + item.quantity + ' </span><span> '
+                                + item.priority + '  </span><span>' + item.username
+                                + '</span>&ensp;&ensp;&ensp;<button id=' + item.item_name + ' name=' + item.username
+                                + ' class="btn btn-primary" onclick="changeAttr(id,name)">Edit</button>&ensp;&ensp;&ensp;'
+                                + '<button type="button" class="btn btn-primary" id="' + i + '" onclick="bought(id)">Bought</button></p>');
+                        } else if (item.item_status == 1) {
+                            $("#results").append('<s><p>' + item.item_name + ' <span>' + item.quantity + ' </span><span> '
+                                + item.priority + '  </span><span>' + item.username
+                                + '</span></s></p>');
+                        }
+                    });
+
+
+                }
+            });
+        });
+        function changeAttr(id, username) {
+            console.log(id + ', ' + username);
+            $.ajax({
+                url: 'http://127.0.0.1:3000/oneItem',
+                type: 'put',
+                data: {
+                    itemName: id,
+                    username: username
+                },
+                success: function (rs) {
+                    console.log(rs);
+                    $("#theBody").hide();
+                    $("#results").empty();
+                    $("#results").append('<div><form class="form-inline"><div class="form-group">'
+                        + '<label for="itemName1">&ensp;&ensp;&ensp;Item Name:&ensp;</label>'
+                        + '<input type="text" name="itemName1" id="itemName1" value="" class="form-control" placeholder="' + rs[0].item_name + '">'
+                        + '</div><div class="form-group"><label for="quantity1">&ensp;&ensp;&ensp;Quantity:&ensp;</label>'
+                        + '<input type="text" class="form-control" name="quantity1" id="quantity1" value="" placeholder="' + rs[0].quantity + '">' + '</div><div class="form-group">'
+                        + '&ensp;&ensp;&ensp;</div><label for="priority1">Priority:&ensp;</label><select id="priority1" name="priority1">'
+                        + '<option value="" style="display: none"></option>'
+                        + '<option value="1">1</option><option value="2">2</option><option value="3">3</option></select>'
+                        + '<button type="button" class="btn btn-primary" onclick="realChange()" id="btn-change">Done</button></form><br><br></div>');
+                }
+
+            });
+        }
+        function realChange() {
+            var itemName = $("#itemName1").val();
+            var qty = $("#quantity1").val();
+            var prior = parseInt($("#priority1").val());
+            if (isNull(itemName)) { itemName = null; }
+            if (isNull(qty)) { qty = null; }
+            if (isNaN(prior)) { prior = null; }
+            $.ajax({
+                url: 'http://127.0.0.1:3000/change',
+                type: 'put',
+                data: {
+                    itemname: itemName,
+                    quantity: qty,
+                    priority: prior
+                },
+                success: function (rs) {
+                    console.log(rs);
+                    $("#results").empty();
+                    $("#theBody").show();
+                    $.each(rs, function (i, item) {
+                        if (item.item_status == 0) {
+                            $("#results").append('<p>' + item.item_name + ' <span>' + item.quantity + ' </span><span> '
+                                + item.priority + '  </span><span>' + item.username
+                                + '</span>&ensp;&ensp;&ensp;<button id=' + item.item_name + ' name=' + item.username
+                                + ' class="btn btn-primary" onclick="changeAttr(id,name)">Edit</button>&ensp;&ensp;&ensp;'
+                                + '<button type="button" class="btn btn-primary" id="' + i + '" onclick="bought(id)">Bought</button></p>');
+                        } else if (item.item_status == 1) {   //bought items
+                            $("#results").append('<s><p>' + item.item_name + ' <span>' + item.quantity + ' </span><span> '
+                                + item.priority + '  </span><span>' + item.username
+                                + '</span></s>&ensp;&ensp;&ensp;</p>');
+                        }
+
+
+                    });
+                }
+
+            })
+            console.log(itemName + ", " + qty + ", " + prior);
+        }
+
+        function bought(id) {
+            var btnId = "#";
+            btnId += id
+            var itemName = $(btnId).prev().attr("id");
+            var username = $(btnId).prev().attr("name");
+
+            $.ajax({
+                url: 'http://127.0.0.1:3000/delete',
+                type: 'put',
+                data: {
+                    itemname: itemName,
+                    username: username
+                },
+                success: function (rs) {
+                    console.log(rs);
+                    $("#results").empty();
+                    $.each(rs, function (i, item) {
+                        if (item.item_status == 0) {
+                            $("#results").append('<p>' + item.item_name + ' <span>' + item.quantity + ' </span><span> '
+                                + item.priority + '  </span><span>' + item.username
+                                + '</span>&ensp;&ensp;&ensp;<button id=' + item.item_name + ' name=' + item.username
+                                + ' class="btn btn-primary" onclick="changeAttr(id,name)">Edit</button>&ensp;&ensp;&ensp;'
+                                + '<button type="button" class="btn btn-primary" id="' + i + '" onclick="bought(id)">Bought</button></p>');
+                        } else if (item.item_status == 1) {
+                            $("#results").append('<s><p>' + item.item_name + ' <span>' + item.quantity + ' </span><span> '
+                                + item.priority + '  </span><span>' + item.username
+                                + '</span></s>&ensp;&ensp;&ensp;</p>');
+                        }
+
+
+                    });
+                }
+            })
+        }
+
+
+        function isNull(str) {
+            if (str == "") return true;
+            var regu = "^[ ]+$";
+            var re = new RegExp(regu);
+            return re.test(str);
+        }
+
+    </script>
+
+</body>
+
+</html>
