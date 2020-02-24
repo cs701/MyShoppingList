@@ -14,6 +14,7 @@ I've created two collections:
       >name
       >state
 
-I am working on getting a user to store the shopping list from the client side. 
-It will work by a user entering their credentials and store their items in a user list by providing my team
-with the CRUD operations using firestore
+The user will store the shopping list from the client side. 
+It will work by once a user enters their credentials and gain access to their list page they can store their unique items to cloud firestore.
+
+Providing CRUD operations using firestore to my team to assist in their stories
