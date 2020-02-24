@@ -65,5 +65,16 @@ document.addEventListener("DOMContentLoaded", event => {
   .catch((error) => {
     document.write(`Something went wrong`, error);
   });
+  
+  // Delete a specific field from a document use update.
+
+  const usersRef = db.collection("users").doc("PJiQcEe0SnKgzBGZu94V");
+
+  // delete email from users ref
+  const removeEmail = userRef = usersRef.update({
+    email: firebase.firestore.FieldValue.delete()
+  });
+  
+  return removeEmail;
 
 
