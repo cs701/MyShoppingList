@@ -2,14 +2,14 @@ Ryan Burns' User Story
 
 The database hase been created in Google's cloud firestore. 
 I've created two collections:
-  1. users
+  1. userlist
       >Priority
       >Product
       >Quantity
       >UID
       >deleted
       >purchased
-  2. userlists
+  2. users
       >email
       >name
       >state
