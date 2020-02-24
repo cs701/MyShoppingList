@@ -17,4 +17,6 @@ I've created two collections:
 The user will be able to store their shopping list from the client side to the db.
 Once a user enters their credentials and gain access to their list page they can view, store, or delete their unique items to cloud firestore db.
 
-Providing CRUD operations using firestore to my team to assist in their stories
+Providing CRUD operations using firestore to my team to assist in their stories.
+
+I will work to provide clarification on how to use firebase features to my team.
