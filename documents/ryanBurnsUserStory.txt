@@ -14,7 +14,7 @@ I've created two collections:
       >name
       >state
 
-The user will store the shopping list from the client side. 
-It will work by once a user enters their credentials and gain access to their list page they can store their unique items to cloud firestore.
+The user will be able to store their shopping list from the client side to the db.
+Once a user enters their credentials and gain access to their list page they can view, store, or delete their unique items to cloud firestore db.
 
 Providing CRUD operations using firestore to my team to assist in their stories
