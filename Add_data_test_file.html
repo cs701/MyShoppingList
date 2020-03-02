@@ -17,6 +17,7 @@
   <li>Paste the Firebase Configuration at the bottom of your index.html file.</li>
   <li>Apply whichever crud operations that you'd like to use on the database</li>
 
+
 <script>
   // Your web app's Firebase configuration
   var firebaseConfig = {
@@ -33,18 +34,21 @@
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
 </script>
-<!--It's better practice to have the script below in a js file---!>
+
 <script>
   const db = firebase.firestore();
 
   const usersRef = db.collection("users");
-  // // Adding a new user to the db. Commented out b/c it will continue to add on refresh
-  // usersRef.doc().set({
-  //   name: "Patricia Palace",
-  //   email: "ppalace@email.com",
-  //   age: 55
-  // })
+  // Adding a new user to the db. Commented out b/c it will continue to add on refresh
+  usersRef.doc().set({
+  name: "Jieqing",
+  email: "jieqing@email.com",
+  age: 23
+  })
 
 </script>
+
+
+
 </body>
 </html>
