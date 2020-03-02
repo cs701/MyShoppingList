@@ -24,7 +24,7 @@ function loadList() {
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
             var product = doc.data();
-            var proId = product.UID;
+            var proId = doc.id;
             var proP = product.Priority;
             var proPriority = checkPirority(proP);
 
@@ -50,7 +50,7 @@ function loadList() {
             cell4.appendChild(document.createTextNode(proPriority));
 
 
-            console.log(proP+ " " + " " + proName + " " + proQ + " " + proPurchased);
+            console.log("Read: " + proId+ " " + proName + " " + proQ + " " + proP + " " + proPurchased);
 
 
         });
@@ -73,16 +73,27 @@ function addNewItem() {
     var pr = document.getElementById("newItemPrioritySelect").value;
     var pn = document.getElementById("itemName").value;
     var po = document.getElementById("itemNumber").value;
-    window.alert(pr+ pn + po);
 
+    if(!pn) {
+        window.alert("Item name cannot be empty!")
+    }
+    if(!isNaN(po) || po == null) {
+        po = 1;
+    }
 
+    var newAddID;
 
     db.collection("userlists").add({
-        Priority: pr,
+        Priority: parseInt(pr),
         Product: pn,
         Purchased: false,
-        Quantity: po
-    })
+        Quantity: parseInt(po)
+
+    }).then(function(docRef) {
+        newAddID = docRef.id;
+    }).catch(function(error) {
+            window.error("Error adding document: ", error);
+        });
 
     document.getElementById("newItem_form").reset();
 
@@ -97,8 +108,8 @@ function addNewItem() {
 
     var checkbox = document.createElement('input');
     checkbox.type = "checkbox";
-    checkbox.name = "cb_";
-    checkbox.id = "cb_";
+    checkbox.name = "cb_newAddID";
+    checkbox.id = "cb_ID";
 
     cell1.appendChild(checkbox);
     cell2.appendChild(document.createTextNode(pn));
