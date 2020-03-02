@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-firestore.js"></script>
+  <title>Template for Firestore</title>
+</head>
+<body>
+  <h1>Quickly Connect to Cloud Firestore:</h1> 
+  <li>Add SDKs for firebase products that you want to use</li>
+  <li>Paste the Firebase Configuration at the bottom of your index.html file.</li>
+  <li>Apply whichever crud operations that you'd like to use on the database</li>
+
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyAcrEE3uznG_G3GTBvn52i_3wVOanj1C38",
+    authDomain: "my-shopping-list-71329.firebaseapp.com",
+    databaseURL: "https://my-shopping-list-71329.firebaseio.com",
+    projectId: "my-shopping-list-71329",
+    storageBucket: "my-shopping-list-71329.appspot.com",
+    messagingSenderId: "841683599724",
+    appId: "1:841683599724:web:6057e99e03992449ae7349",
+    measurementId: "G-Y3R7LVYJZL"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
+<script>
+  const db = firebase.firestore();
+
+  const usersRef = db.collection("users");
+  // Adding a new user to the db. Commented out b/c it will continue to add on refresh
+  usersRef.doc().set({
+  name: "Jieqing",
+  email: "jieqing@email.com",
+  age: 23
+  })
+
+</script>
+
+
+
+</body>
+</html>
