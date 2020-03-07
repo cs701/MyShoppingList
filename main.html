@@ -73,9 +73,7 @@
                 <th>Item Name</th>
                 <th>Number</th>
                 <th>Priority</th>
-                <th>
-                    <!--                    <button type="button" class="btn btn-danger btn-sm"><i class="material-icons md-24">delete_outline</i></button>-->
-                </th>
+                <th></th>
 
 
             </tr>
@@ -86,6 +84,10 @@
         <button type="button" id="addItem" class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="bottom"
                 data-content="TODO: Add adding item from here">
             Add more
+        </button>
+
+        <button type="button" id="deleteButton" onclick="deleteChecked()" class="btn btn-danger">
+            Delete
         </button>
 
         <form id="newItem_form">

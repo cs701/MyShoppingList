@@ -15,7 +15,9 @@ firebase.analytics();
 
 
 var db = firebase.firestore();
-var currentPageListItems;
+var checkedList = [];
+document.getElementById("deleteButton").style.visibility = "hidden";
+
 loadAllList();
 
 
@@ -36,6 +38,10 @@ class Item {
     markPurchased() {
         this.purchased = true;
     }
+
+    markDeleted() {
+        this.deleted = true;
+    }
 }
 
 // Firestore data converter
@@ -53,7 +59,7 @@ const itemConverter = {
         const data = snapshot.data(options);
         return new Item(data.product, data.quantity, data.priority, data.purchased, data.deleted)
     }
-}
+};
 
 
 
@@ -65,7 +71,7 @@ function addNewItem() {
     var po = document.getElementById("itemNumber").value;
 
     if (!pn) {
-        window.alert("Item name cannot be empty!")
+        window.alert("Item name cannot be empty!");
         return
     }
     if (isNaN(po) || po == '' || po == null) {
@@ -108,8 +114,8 @@ function addNewItem() {
         purchasedButton.className = 'btn btn-success btn-sm';
         purchasedButton.name = "button_" + newAddID;
         purchasedButton.id = "button_" + newAddID;
-        purchasedButton.innerHTML = '<i class="material-icons md-24">done</i>';
-
+        //purchasedButton.innerHTML = '<i class="material-icons md-24">done</i>';
+        purchasedButton.innerHTML = "Purchased";
 
         cell1.appendChild(checkbox);
         cell2.appendChild(document.createTextNode(pn));
@@ -136,7 +142,8 @@ function addNewItem() {
 function loadAllList() {
     var table = document.getElementById("userItemList");
 
-    db.collection("Item").get()
+    db.collection("Item").where("deleted", "==", false)
+        .get()
         .then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 // doc.data() is never undefined for query doc snapshots
@@ -163,14 +170,15 @@ function loadAllList() {
                 checkbox.name = "cb_" + proId;
                 checkbox.id = "cb_" + proId;
 
+
                 var purchasedButton = document.createElement('button');
 
                 purchasedButton.type = "button";
                 purchasedButton.className = 'btn btn-success btn-sm';
                 purchasedButton.name = "button_" + proId;
                 purchasedButton.id = "button_" + proId;
-                purchasedButton.innerHTML = '<i class="material-icons md-24">done</i>';
-
+                //purchasedButton.innerHTML = '<i class="material-icons md-24">done</i>';
+                purchasedButton.innerHTML = "Purchased";
 
                 cell1.appendChild(checkbox);
                 cell3.appendChild(document.createTextNode(proQ));
@@ -184,11 +192,26 @@ function loadAllList() {
                     cell2.appendChild(temp);
                 } else {
                     cell2.appendChild(document.createTextNode(proName));
-                    cell5.appendChild(purchasedButton);
-                    document.getElementById("button_" + proId).addEventListener("click", function () {
+                    purchasedButton.addEventListener("click", function () {
                         clickPurchaseButton(proId);
                     });
+                    cell5.appendChild(purchasedButton);
                 }
+
+                checkbox.addEventListener("click", function () {
+                    if (checkbox.checked) {
+                        addToList(proId, checkedList);
+                    } else {
+                        removefromListByItem(proId, checkedList);
+                    }
+                    if (isEmptyList(checkedList)) {
+                        document.getElementById("deleteButton").style.visibility = "hidden";
+                    } else {
+                        document.getElementById("deleteButton").style.visibility = "visible";
+                    }
+
+
+                })
 
 
             });
@@ -198,6 +221,7 @@ function loadAllList() {
 
 }
 
+
 function checkPirority(i) {
     if (i == 0) {
        return "Low";
@@ -205,6 +229,23 @@ function checkPirority(i) {
         return "Medium";
     } else {
         return "High";
+    }
+}
+
+function addToList(item, list) {
+    list.push(item);
+
+}
+
+function removefromListByItem(item, list) {
+    list.splice(list.indexOf(item), 1);
+}
+
+function isEmptyList(list) {
+    if (list.length == 0) {
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -238,9 +279,38 @@ function clickPurchaseButton(id) {
 
 }
 
+function deleteChecked() {
+    checkedList.forEach(markDeleteFormDB);
+
+}
+
+function markDeleteFormDB(id) {
+    console.log(id);
+    db.collection("Item").doc(id)
+        .withConverter(itemConverter)
+        .get().then(function (doc) {
+        if (doc.exists) {
+            item = doc.data();
+            item.markDeleted();
+            db.collection("Item").doc(id)
+                .withConverter(itemConverter)
+                .set(item).then(function () {
+                window.location.reload();
+            });
+
+        } else {
+            console.log("No such document!")
+        }
+    }).catch(function (error) {
+        console.log("Error getting document:", error)
+    });
+
+
+}
+
 
 $(function () {
     $('#addItem').popover({
         container: 'body'
     })
-})
+});

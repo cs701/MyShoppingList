@@ -10,11 +10,12 @@
     font-size: 24px;
 }
 
-tr.strikeout td:before {
-    content: " ";
-    position: absolute;
-    top: 50%;
-    left: 0;
-    border-bottom: 1px solid #111;
-    width: 100%;
-}
+
+/*tr.strikeout td:before {*/
+/*    content: " ";*/
+/*    position: absolute;*/
+/*    top: 50%;*/
+/*    left: 0;*/
+/*    border-bottom: 1px solid #111;*/
+/*    width: 100%;*/
+/*}*/
