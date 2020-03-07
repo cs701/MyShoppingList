@@ -8,10 +8,10 @@ Done:
 - UI design for main page
 - Purchased button working
 - Using Item Object, firebase data converter
+- Delete item working: reload after delete
 
 Need to do:
 
 - Add new item handover to addmore button(Rui)
-- Delete single item (Sneha/Rongshi or Rui/Xiran)
 - ALL/Bought/sortby button (Sneha/Rongshi or Rui/Xiran)
 - Merge login page with section id management (Asad/Sneha)
