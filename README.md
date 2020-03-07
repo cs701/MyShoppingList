@@ -2,10 +2,13 @@
 
 Task pending:
 
-- Sortby button (Sneha/Rongshi)
+- Sortby button (Rongshi)
     - This button might need a reorginize of data structure of Items, can talk later
-- Purchased button (Sneha/Rongshi or Rui/Xiran)
-- Merge login page with section id management (Asad/Sneha)
+- Ensure description is unique (Rongshi)
+- Purchased button (Rui/Xiran)
+- Being able to change attributes (Rui/Xiran)
+- Security/Authentication (Asad/Sneha)
+- Merge login page with section id management (Sneha)
 - Style consistency
  
 
