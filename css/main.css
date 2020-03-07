@@ -10,7 +10,9 @@
     font-size: 24px;
 }
 
-
+.btnPurchaseLine {
+    color: white;
+}
 /*tr.strikeout td:before {*/
 /*    content: " ";*/
 /*    position: absolute;*/

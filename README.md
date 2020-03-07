@@ -1,4 +1,14 @@
-# MyShoppingList
+# My Shopping List
+
+Task pending:
+
+- Sortby button (Sneha/Rongshi)
+    - This button might need a reorginize of data structure of Items, can talk later
+- Purchased button (Sneha/Rongshi or Rui/Xiran)
+- Merge login page with section id management (Asad/Sneha)
+- Style consistency
+ 
+
 
 Done:
 
@@ -9,9 +19,5 @@ Done:
 - Purchased button working
 - Using Item Object, firebase data converter
 - Delete item working: reload after delete
+- Adding item with "Add more" button built to the main table list
 
-Need to do:
-
-- Add new item handover to addmore button(Rui)
-- ALL/Bought/sortby button (Sneha/Rongshi or Rui/Xiran)
-- Merge login page with section id management (Asad/Sneha)

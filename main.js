@@ -62,13 +62,114 @@ const itemConverter = {
 };
 
 
+function addMoreButton() {
+
+    var table = document.getElementById("userItemList");
+    document.getElementById("addMoreButton").style.visibility = "hidden";
+
+
+    var row = table.insertRow(-1);
+
+    row.id = "newItemRow";
+
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
+    var cell5 = row.insertCell(4);
+
+
+    var cancelNewItemButton = document.createElement('button');
+    cancelNewItemButton.type = 'button';
+    cancelNewItemButton.id = 'cancelNewItemButton';
+    cancelNewItemButton.className = 'btn btn-sm btn-outline-danger';
+    cancelNewItemButton.innerHTML = "x";
+
+
+    var newItemNameInput = document.createElement('input');
+
+    newItemNameInput.type = 'input';
+    newItemNameInput.className = 'form-control';
+    newItemNameInput.placeholder = 'Item Name';
+    newItemNameInput.name = "newItemNameInput";
+    newItemNameInput.id = "newItemNameInput";
+
+
+    var newItemNumberInput = document.createElement('input');
+
+    newItemNumberInput.type = 'input';
+    newItemNumberInput.form = 'form-control';
+    newItemNumberInput.placeholder = 'Quantity';
+    newItemNumberInput.name = "newItemNumberInput";
+    newItemNumberInput.id = "newItemNumberInput";
+
+    var newItemPrioritySelect = document.createElement('select');
+
+    newItemPrioritySelect.type = 'input';
+    newItemPrioritySelect.className = 'form-control custom-select';
+    newItemPrioritySelect.name = "newItemPrioritySelect";
+    newItemPrioritySelect.id = "newItemPrioritySelect";
+
+    var prOption1 = document.createElement('option');
+    prOption1.value = "2";
+    prOption1.appendChild(document.createTextNode("Priority"));
+
+
+    var prOption2 = document.createElement('option');
+    prOption2.value = "0";
+    prOption2.appendChild(document.createTextNode("Low"));
+
+    var prOption3 = document.createElement('option');
+    prOption3.value = "1";
+    prOption3.appendChild(document.createTextNode("Medium"));
+    var prOption4 = document.createElement('option');
+    prOption4.value = "2";
+    prOption4.appendChild(document.createTextNode("High"));
+
+
+    newItemPrioritySelect.appendChild(prOption1);
+    newItemPrioritySelect.appendChild(prOption2);
+    newItemPrioritySelect.appendChild(prOption3);
+    newItemPrioritySelect.appendChild(prOption4);
+
+
+    var addNewButton = document.createElement('button');
+
+    addNewButton.type = "button";
+    addNewButton.className = 'btn btn-primary btn-secondary';
+    addNewButton.innerHTML = "+";
+    addNewButton.id = "addNewButton";
+
+    cell1.appendChild(cancelNewItemButton);
+    cell2.appendChild(newItemNameInput);
+    cell3.appendChild(newItemNumberInput);
+    cell4.appendChild(newItemPrioritySelect);
+    cell5.appendChild(addNewButton);
+
+
+    document.getElementById("addNewButton").addEventListener("click", function () {
+        addNewItem();
+    });
+    document.getElementById("cancelNewItemButton").addEventListener("click", function () {
+        var table = document.getElementById("userItemList");
+        var tableRowCount = table.rows.length;
+        table.deleteRow(tableRowCount - 1);
+        document.getElementById("addMoreButton").style.visibility = "visible";
+
+    });
+
+
+}
+
 
 
 
 function addNewItem() {
+
+
     var pr = document.getElementById("newItemPrioritySelect").value;
-    var pn = document.getElementById("itemName").value;
-    var po = document.getElementById("itemNumber").value;
+    var pn = document.getElementById("newItemNameInput").value;
+    var po = document.getElementById("newItemNumberInput").value;
 
     if (!pn) {
         window.alert("Item name cannot be empty!");
@@ -90,8 +191,6 @@ function addNewItem() {
         deleted: false
     }).then(function (docRef) {
         newAddID = docRef.id;
-
-        document.getElementById("newItem_form").reset();
 
         var table = document.getElementById("userItemList");
 
@@ -115,7 +214,7 @@ function addNewItem() {
         purchasedButton.name = "button_" + newAddID;
         purchasedButton.id = "button_" + newAddID;
         //purchasedButton.innerHTML = '<i class="material-icons md-24">done</i>';
-        purchasedButton.innerHTML = "Purchased";
+        purchasedButton.innerHTML = "&#x2713";
 
         cell1.appendChild(checkbox);
         cell2.appendChild(document.createTextNode(pn));
@@ -129,8 +228,28 @@ function addNewItem() {
             clickPurchaseButton(newAddID);
         });
 
+        checkbox.addEventListener("click", function () {
+            if (checkbox.checked) {
+                addToList(newAddID, checkedList);
+            } else {
+                removefromListByItem(newAddID, checkedList);
+            }
+            if (isEmptyList(checkedList)) {
+                document.getElementById("deleteButton").style.visibility = "hidden";
+            } else {
+                document.getElementById("deleteButton").style.visibility = "visible";
+            }
+
+        });
+        //delete the adding new Item row
+        document.getElementById("addMoreButton").style.visibility = "visible";
+        var table = document.getElementById("userItemList");
+        var tableRowCount = table.rows.length;
+        table.deleteRow(tableRowCount - 2);
+
+
     }).catch(function (error) {
-        window.error("Error adding document: ", error);
+        console.log("Error adding document: ", error);
     });
 
 
@@ -155,7 +274,6 @@ function loadAllList() {
                 var proName = product.product;
                 var proQ = product.quantity;
                 var proPurchased = product.purchased;
-                var proDelete = product.deleted;
 
                 var row = table.insertRow(-1);
 
@@ -174,11 +292,10 @@ function loadAllList() {
                 var purchasedButton = document.createElement('button');
 
                 purchasedButton.type = "button";
-                purchasedButton.className = 'btn btn-success btn-sm';
+                purchasedButton.className = 'btn btn-success btn-sm btnPurchaseLine';
                 purchasedButton.name = "button_" + proId;
                 purchasedButton.id = "button_" + proId;
-                //purchasedButton.innerHTML = '<i class="material-icons md-24">done</i>';
-                purchasedButton.innerHTML = "Purchased";
+                purchasedButton.innerHTML = "&#x2713";
 
                 cell1.appendChild(checkbox);
                 cell3.appendChild(document.createTextNode(proQ));
@@ -220,7 +337,6 @@ function loadAllList() {
 
 
 }
-
 
 function checkPirority(i) {
     if (i == 0) {
@@ -278,6 +394,7 @@ function clickPurchaseButton(id) {
 
 
 }
+
 
 function deleteChecked() {
     checkedList.forEach(markDeleteFormDB);

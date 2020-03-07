@@ -81,34 +81,14 @@
 
         </table>
 
-        <button type="button" id="addItem" class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="bottom"
-                data-content="TODO: Add adding item from here">
-            Add more
-        </button>
+        <!--        <button type="button" id="addItem" class="btn btn-secondary" data-container="body" data-toggle="popover" data-title="Add new item:" data-html="true" data-placement="bottom"-->
+        <!--                data-content='<h1>TODO</h1>'>-->
+        <!--            Add more-->
+        <!--        </button>-->
 
-        <button type="button" id="deleteButton" onclick="deleteChecked()" class="btn btn-danger">
-            Delete
-        </button>
+        <button type="button" id="addMoreButton" onclick="addMoreButton()" class="btn btn-secondary">Add more</button>
 
-        <form id="newItem_form">
-            <table>
-                <th> </th>
-                <th><input type="text" class="form-control" id="itemName" placeholder="Item Name" aria-label="itemName" aria-describedby="basic-addon1"></th>
-                <th><input type="text" class="form-control" id="itemNumber" placeholder="Number" aria-label="itemNumber" aria-describedby="basic-addon1"></th>
-                <th>
-
-                    <select class="custom-select" id="newItemPrioritySelect">
-                        <option selected value="2">Priority</option>
-                        <option value="0">Low</option>
-                        <option value="1">Medium</option>
-                        <option value="2">High</option>
-                    </select>
-
-                </th>
-
-                <th><button type="button" class="btn btn-secondary" onclick="addNewItem()" >+</button></th>
-            </table>
-        </form>
+        <button type="button" id="deleteButton" onclick="deleteChecked()" class="btn btn-danger">Delete</button>
     </div>
 
 </div>
