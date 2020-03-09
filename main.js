@@ -16,6 +16,7 @@ firebase.analytics();
 
 var db = firebase.firestore();
 var checkedList = [];
+var sortKey = 'id';
 document.getElementById("deleteButton").style.visibility = "hidden";
 
 loadAllList();
@@ -31,15 +32,15 @@ class Item {
         this.deleted = deleted;
     }
 
-    toString() {
+    toString () {
         return this.product + ', ' + this.quantity + ', ' + this.priority + ', ' + this.purchased + ', ' + this.deleted;
     }
 
-    markPurchased() {
+    markPurchased () {
         this.purchased = true;
     }
 
-    markDeleted() {
+    markDeleted () {
         this.deleted = true;
     }
 }
@@ -62,7 +63,7 @@ const itemConverter = {
 };
 
 
-function addMoreButton() {
+function addMoreButton () {
 
     var table = document.getElementById("userItemList");
     document.getElementById("addMoreButton").style.visibility = "hidden";
@@ -164,7 +165,7 @@ function addMoreButton() {
 
 
 
-function addNewItem() {
+function addNewItem () {
 
 
     var pr = document.getElementById("newItemPrioritySelect").value;
@@ -181,100 +182,123 @@ function addNewItem() {
 
 
     var newAddID;
+    db.collection("Item").where('product', '==', pn).get().then((querySnapshot) => {
+        if (querySnapshot.empty) {
+            db.collection("Item").add({
+                product: pn,
+                quantity: parseInt(po),
+                priority: parseInt(pr),
+                purchased: false,
+                deleted: false
+            }).then(function (docRef) {
+                newAddID = docRef.id;
+
+                var table = document.getElementById("userItemList");
+
+                var row = table.insertRow(-1);
+
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                var cell4 = row.insertCell(3);
+                var cell5 = row.insertCell(4);
+
+                var checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.name = "cb_newAddID";
+                checkbox.id = "cb_newAddID";
+
+                var purchasedButton = document.createElement('button');
+
+                purchasedButton.type = "button";
+                purchasedButton.className = 'btn btn-success btn-sm';
+                purchasedButton.name = "button_" + newAddID;
+                purchasedButton.id = "button_" + newAddID;
+                //purchasedButton.innerHTML = '<i class="material-icons md-24">done</i>';
+                purchasedButton.innerHTML = "&#x2713";
+
+                cell1.appendChild(checkbox);
+                cell2.appendChild(document.createTextNode(pn));
+                cell3.appendChild(document.createTextNode(po));
+                cell4.appendChild(document.createTextNode(checkPirority(pr)));
+                cell5.appendChild(purchasedButton);
+
+                cell2.id = "cell_" + newAddID;
+
+                document.getElementById("button_" + newAddID).addEventListener("click", function () {
+                    clickPurchaseButton(newAddID);
+                });
+
+                checkbox.addEventListener("click", function () {
+                    if (checkbox.checked) {
+                        addToList(newAddID, checkedList);
+                    } else {
+                        removefromListByItem(newAddID, checkedList);
+                    }
+                    if (isEmptyList(checkedList)) {
+                        document.getElementById("deleteButton").style.visibility = "hidden";
+                    } else {
+                        document.getElementById("deleteButton").style.visibility = "visible";
+                    }
+
+                });
+                //delete the adding new Item row
+                document.getElementById("addMoreButton").style.visibility = "visible";
+                var table = document.getElementById("userItemList");
+                var tableRowCount = table.rows.length;
+                table.deleteRow(tableRowCount - 2);
 
 
-    db.collection("Item").add({
-        product: pn,
-        quantity: parseInt(po),
-        priority: parseInt(pr),
-        purchased: false,
-        deleted: false
-    }).then(function (docRef) {
-        newAddID = docRef.id;
-
-        var table = document.getElementById("userItemList");
-
-        var row = table.insertRow(-1);
-
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        var cell4 = row.insertCell(3);
-        var cell5 = row.insertCell(4);
-
-        var checkbox = document.createElement('input');
-        checkbox.type = "checkbox";
-        checkbox.name = "cb_newAddID";
-        checkbox.id = "cb_newAddID";
-
-        var purchasedButton = document.createElement('button');
-
-        purchasedButton.type = "button";
-        purchasedButton.className = 'btn btn-success btn-sm';
-        purchasedButton.name = "button_" + newAddID;
-        purchasedButton.id = "button_" + newAddID;
-        //purchasedButton.innerHTML = '<i class="material-icons md-24">done</i>';
-        purchasedButton.innerHTML = "&#x2713";
-
-        cell1.appendChild(checkbox);
-        cell2.appendChild(document.createTextNode(pn));
-        cell3.appendChild(document.createTextNode(po));
-        cell4.appendChild(document.createTextNode(checkPirority(pr)));
-        cell5.appendChild(purchasedButton);
-
-        cell2.id = "cell_" + newAddID;
-
-        document.getElementById("button_" + newAddID).addEventListener("click", function () {
-            clickPurchaseButton(newAddID);
-        });
-
-        checkbox.addEventListener("click", function () {
-            if (checkbox.checked) {
-                addToList(newAddID, checkedList);
-            } else {
-                removefromListByItem(newAddID, checkedList);
-            }
-            if (isEmptyList(checkedList)) {
-                document.getElementById("deleteButton").style.visibility = "hidden";
-            } else {
-                document.getElementById("deleteButton").style.visibility = "visible";
-            }
-
-        });
-        //delete the adding new Item row
-        document.getElementById("addMoreButton").style.visibility = "visible";
-        var table = document.getElementById("userItemList");
-        var tableRowCount = table.rows.length;
-        table.deleteRow(tableRowCount - 2);
-
-
-    }).catch(function (error) {
-        console.log("Error adding document: ", error);
-    });
-
-
+            }).catch(function (error) {
+                console.log("Error adding document: ", error);
+            });
+        }
+        else
+            window.alert("Duplicate name!");
+    })
 
 
 
 }
 
-function loadAllList() {
-    var table = document.getElementById("userItemList");
 
+
+function loadAllList () {
+    var table = document.getElementById("userItemList");
+    table.innerHTML = "";
     db.collection("Item").where("deleted", "==", false)
         .get()
         .then(function (querySnapshot) {
+            let items = [];
             querySnapshot.forEach(function (doc) {
-                // doc.data() is never undefined for query doc snapshots
-                var product = doc.data();
-                var proId = doc.id;
+                items.push(Object.assign({}, doc.data(), { id: doc.id }));
+            });
+
+
+            items.sort((a, b) => {
+                if (a[sortKey] > b[sortKey]) {
+                    return -1;
+                } else if (a[sortKey] < b[sortKey]) {
+                    return 1
+                }
+                return 0;
+            });
+
+            items.forEach(function (product) {
+
+                var proId = product.id;
 
                 var proP = product.priority;
                 var proPriority = checkPirority(proP);
                 var proName = product.product;
                 var proQ = product.quantity;
                 var proPurchased = product.purchased;
-
+                items.push({
+                    priority: proP,
+                    product: proName,
+                    quantity: proQ,
+                    proPurchased: proPurchased
+                });
                 var row = table.insertRow(-1);
 
                 var cell1 = row.insertCell(0);
@@ -326,21 +350,17 @@ function loadAllList() {
                     } else {
                         document.getElementById("deleteButton").style.visibility = "visible";
                     }
-
-
                 })
-
-
             });
 
-    });
+        });
 
 
 }
 
-function checkPirority(i) {
+function checkPirority (i) {
     if (i == 0) {
-       return "Low";
+        return "Low";
     } else if (i == 1) {
         return "Medium";
     } else {
@@ -348,16 +368,16 @@ function checkPirority(i) {
     }
 }
 
-function addToList(item, list) {
+function addToList (item, list) {
     list.push(item);
 
 }
 
-function removefromListByItem(item, list) {
+function removefromListByItem (item, list) {
     list.splice(list.indexOf(item), 1);
 }
 
-function isEmptyList(list) {
+function isEmptyList (list) {
     if (list.length == 0) {
         return true;
     } else {
@@ -366,7 +386,7 @@ function isEmptyList(list) {
 }
 
 
-function clickPurchaseButton(id) {
+function clickPurchaseButton (id) {
 
     var content = document.getElementById("cell_" + id);
     content.innerHTML = content.textContent.strike();
@@ -396,12 +416,12 @@ function clickPurchaseButton(id) {
 }
 
 
-function deleteChecked() {
+function deleteChecked () {
     checkedList.forEach(markDeleteFormDB);
 
 }
 
-function markDeleteFormDB(id) {
+function markDeleteFormDB (id) {
     console.log(id);
     db.collection("Item").doc(id)
         .withConverter(itemConverter)
@@ -422,6 +442,12 @@ function markDeleteFormDB(id) {
         console.log("Error getting document:", error)
     });
 
+
+}
+
+function sortBy (key) {
+    sortKey = key;
+    loadAllList();
 
 }
 
