@@ -2,9 +2,6 @@
 
 Task pending:
 
-- Sortby button (Rongshi)
-    - This button might need a reorginize of data structure of Items, can talk later
-- Ensure description is unique (Rongshi)
 - Purchased button (Rui/Xiran)
 - Being able to change attributes (Rui/Xiran)
 - Security/Authentication (Asad/Sneha)
@@ -23,4 +20,6 @@ Done:
 - Using Item Object, firebase data converter
 - Delete item working: reload after delete
 - Adding item with "Add more" button built to the main table list
+- Sortby button (Rongshi)
+- Ensure description is unique (Rongshi)
 
