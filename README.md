@@ -7,7 +7,7 @@ Task pending:
 - Security/Authentication (Asad/Sneha)
 - Merge login page with section id management (Sneha)
 - Style consistency
-- Database Security (Ryan /Jieqing
+- Database Security setup (Ryan /Jieqing)
  
 
 
