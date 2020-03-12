@@ -18,9 +18,10 @@ var db = firebase.firestore();
 var checkedList = [];
 var sortKey = 'id';
 var items = [];
+var listType = 'not';
 document.getElementById("deleteButton").style.visibility = "hidden";
 
-loadAllList();
+loadAllList(listType);
 
 
 //object Item
@@ -263,28 +264,63 @@ function addNewItem () {
 }
 
 
-
-function loadAllList () {
+function loadAllList(argu) {
     items = [];
-    db.collection("Item").where("deleted", "==", false)
-        .get()
-        .then(function (querySnapshot) {
-            querySnapshot.forEach(function (doc) {
-                items.push(Object.assign({}, doc.data(), {id: doc.id}));
-                console.log("item push +1");
+    listType = argu;
+
+    if (listType === 'all') {
+
+        db.collection("Item").where("deleted", "==", false)
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    items.push(Object.assign({}, doc.data(), {id: doc.id}));
+                });
+            })
+            .then(function () {
+                clearList();
+                document.getElementById("buttonWaitingList").className = "btn btn-sm btn-outline-secondary";
+                document.getElementById("buttonAll").className = "btn btn-sm btn-secondary";
+                console.log("I am here 2");
+            })
+            .then(function () {
+                renderList();
             });
-        })
-        .then(function () {
-            renderList();
-        });
+
+    } else {
+        db.collection("Item").where("deleted", "==", false).where("purchased", "==", false)
+            .get()
+            .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                    items.push(Object.assign({}, doc.data(), {id: doc.id}));
+                });
+            })
+            .then(function () {
+                clearList();
+                document.getElementById("buttonAll").className = "btn btn-sm btn-outline-secondary";
+                document.getElementById("buttonWaitingList").className = "btn btn-sm btn-secondary";
+            })
+            .then(function () {
+                renderList();
+            });
+    }
+
+
+}
+
+function clearList() {
+
+    var table = document.getElementById("userItemList");
+    while (table.rows.length > 1) {
+        table.deleteRow(1);
+    }
 
 }
 
 
 function renderList() {
     var table = document.getElementById("userItemList");
-    table.innerHTML = "";
-    window.alert(items.length);
+
     items.sort((a, b) => {
         if (a[sortKey] > b[sortKey]) {
             return -1;
@@ -441,7 +477,7 @@ function markDeleteFormDB (id) {
             db.collection("Item").doc(id)
                 .withConverter(itemConverter)
                 .set(item).then(function () {
-                window.location.reload();
+                loadAllList(listType);
             });
 
         } else {
@@ -456,7 +492,7 @@ function markDeleteFormDB (id) {
 
 function sortBy (key) {
     sortKey = key;
-    loadAllList();
+    loadAllList(listType);
 
 }
 

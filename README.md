@@ -2,7 +2,7 @@
 
 Task pending:
 
-- Purchased button (Rui/Xiran)
+- Ensure description is unique: Need to fix the cap/lower case issue (RongShi/Rui) 
 - Being able to change attributes (Rui/Xiran)
 - Security/Authentication (Asad/Sneha)
 - Merge login page with section id management (Sneha)
@@ -22,5 +22,5 @@ Done:
 - Delete item working: reload after delete
 - Adding item with "Add more" button built to the main table list
 - Sortby button (Rongshi)
-- Ensure description is unique (Rongshi)
+- All/WaitingList button
 
