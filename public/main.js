@@ -281,7 +281,6 @@ function loadAllList(argu) {
                 clearList();
                 document.getElementById("buttonWaitingList").className = "btn btn-sm btn-outline-secondary";
                 document.getElementById("buttonAll").className = "btn btn-sm btn-secondary";
-                console.log("I am here 2");
             })
             .then(function () {
                 renderList();

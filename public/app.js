@@ -88,7 +88,7 @@
       myPost.onSnapshot(doc => {
         const data = doc.data();
         console.log(data);
-      })
+      });
 
 
       myPost.get()
