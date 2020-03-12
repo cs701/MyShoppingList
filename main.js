@@ -17,6 +17,7 @@ firebase.analytics();
 var db = firebase.firestore();
 var checkedList = [];
 var sortKey = 'id';
+var items = [];
 document.getElementById("deleteButton").style.visibility = "hidden";
 
 loadAllList();
@@ -264,96 +265,104 @@ function addNewItem () {
 
 
 function loadAllList () {
-    var table = document.getElementById("userItemList");
-    table.innerHTML = "";
+    items = [];
     db.collection("Item").where("deleted", "==", false)
         .get()
         .then(function (querySnapshot) {
-            let items = [];
             querySnapshot.forEach(function (doc) {
-                items.push(Object.assign({}, doc.data(), { id: doc.id }));
+                items.push(Object.assign({}, doc.data(), {id: doc.id}));
+                console.log("item push +1");
             });
-
-
-            items.sort((a, b) => {
-                if (a[sortKey] > b[sortKey]) {
-                    return -1;
-                } else if (a[sortKey] < b[sortKey]) {
-                    return 1
-                }
-                return 0;
-            });
-
-            items.forEach(function (product) {
-
-                var proId = product.id;
-
-                var proP = product.priority;
-                var proPriority = checkPirority(proP);
-                var proName = product.product;
-                var proQ = product.quantity;
-                var proPurchased = product.purchased;
-                items.push({
-                    priority: proP,
-                    product: proName,
-                    quantity: proQ,
-                    proPurchased: proPurchased
-                });
-                var row = table.insertRow(-1);
-
-                var cell1 = row.insertCell(0);
-                var cell2 = row.insertCell(1);
-                var cell3 = row.insertCell(2);
-                var cell4 = row.insertCell(3);
-                var cell5 = row.insertCell(4);
-
-                var checkbox = document.createElement('input');
-                checkbox.type = "checkbox";
-                checkbox.name = "cb_" + proId;
-                checkbox.id = "cb_" + proId;
-
-
-                var purchasedButton = document.createElement('button');
-
-                purchasedButton.type = "button";
-                purchasedButton.className = 'btn btn-success btn-sm btnPurchaseLine';
-                purchasedButton.name = "button_" + proId;
-                purchasedButton.id = "button_" + proId;
-                purchasedButton.innerHTML = "&#x2713";
-
-                cell1.appendChild(checkbox);
-                cell3.appendChild(document.createTextNode(proQ));
-                cell4.appendChild(document.createTextNode(proPriority));
-                cell2.id = "cell_" + proId;
-
-
-                if (proPurchased) {
-                    var temp = document.createElement("html");
-                    temp.innerHTML = proName.strike();
-                    cell2.appendChild(temp);
-                } else {
-                    cell2.appendChild(document.createTextNode(proName));
-                    purchasedButton.addEventListener("click", function () {
-                        clickPurchaseButton(proId);
-                    });
-                    cell5.appendChild(purchasedButton);
-                }
-
-                checkbox.addEventListener("click", function () {
-                    if (checkbox.checked) {
-                        addToList(proId, checkedList);
-                    } else {
-                        removefromListByItem(proId, checkedList);
-                    }
-                    if (isEmptyList(checkedList)) {
-                        document.getElementById("deleteButton").style.visibility = "hidden";
-                    } else {
-                        document.getElementById("deleteButton").style.visibility = "visible";
-                    }
-                })
-            });
-
+        })
+        .then(function () {
+            renderList();
         });
+
+}
+
+
+function renderList() {
+    var table = document.getElementById("userItemList");
+    table.innerHTML = "";
+    window.alert(items.length);
+    items.sort((a, b) => {
+        if (a[sortKey] > b[sortKey]) {
+            return -1;
+        } else if (a[sortKey] < b[sortKey]) {
+            return 1
+        }
+        return 0;
+    });
+
+    items.forEach(function (product) {
+
+        var proId = product.id;
+
+        var proP = product.priority;
+        var proPriority = checkPirority(proP);
+        var proName = product.product;
+        var proQ = product.quantity;
+        var proPurchased = product.purchased;
+        items.push({
+            priority: proP,
+            product: proName,
+            quantity: proQ,
+            proPurchased: proPurchased
+        });
+        var row = table.insertRow(-1);
+
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+
+        var checkbox = document.createElement('input');
+        checkbox.type = "checkbox";
+        checkbox.name = "cb_" + proId;
+        checkbox.id = "cb_" + proId;
+
+
+        var purchasedButton = document.createElement('button');
+
+        purchasedButton.type = "button";
+        purchasedButton.className = 'btn btn-success btn-sm btnPurchaseLine';
+        purchasedButton.name = "button_" + proId;
+        purchasedButton.id = "button_" + proId;
+        purchasedButton.innerHTML = "&#x2713";
+
+        cell1.appendChild(checkbox);
+        cell3.appendChild(document.createTextNode(proQ));
+        cell4.appendChild(document.createTextNode(proPriority));
+        cell2.id = "cell_" + proId;
+
+
+        if (proPurchased) {
+            var temp = document.createElement("html");
+            temp.innerHTML = proName.strike();
+            cell2.appendChild(temp);
+        } else {
+            cell2.appendChild(document.createTextNode(proName));
+            purchasedButton.addEventListener("click", function () {
+                clickPurchaseButton(proId);
+            });
+            cell5.appendChild(purchasedButton);
+        }
+
+        checkbox.addEventListener("click", function () {
+            if (checkbox.checked) {
+                addToList(proId, checkedList);
+            } else {
+                removefromListByItem(proId, checkedList);
+            }
+            if (isEmptyList(checkedList)) {
+                document.getElementById("deleteButton").style.visibility = "hidden";
+            } else {
+                document.getElementById("deleteButton").style.visibility = "visible";
+            }
+        });
+
+    });
 
 
 }
