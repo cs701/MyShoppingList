@@ -1,0 +1,23 @@
+#addItem {
+    align-items: center;
+}
+
+.material-icons.md-18 {
+    font-size: 18px;
+}
+
+.material-icons.md-24 {
+    font-size: 24px;
+}
+
+.btnPurchaseLine {
+    color: white;
+}
+/*tr.strikeout td:before {*/
+/*    content: " ";*/
+/*    position: absolute;*/
+/*    top: 50%;*/
+/*    left: 0;*/
+/*    border-bottom: 1px solid #111;*/
+/*    width: 100%;*/
+/*}*/
