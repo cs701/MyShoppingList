@@ -1,3 +1,23 @@
+    
+    var firebaseConfig = {
+      apiKey: "AIzaSyAcrEE3uznG_G3GTBvn52i_3wVOanj1C38",
+      authDomain: "my-shopping-list-71329.firebaseapp.com",
+      databaseURL: "https://my-shopping-list-71329.firebaseio.com",
+      projectId: "my-shopping-list-71329",
+      storageBucket: "my-shopping-list-71329.appspot.com",
+      messagingSenderId: "841683599724",
+      appId: "1:841683599724:web:6057e99e03992449ae7349",
+      measurementId: "G-Y3R7LVYJZL"
+  };
+  
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+ 
+
+console.log(firebaseConfig) // Undefined
+  
+  var db = firebase.firestore();
     // Google authentication
     document.addEventListener("DOMContentLoaded", event => {
 
@@ -28,6 +48,7 @@
       user = result.user;
           document.write(`Hello ${user.email}`);
           console.log(user)   
+          window.location.href = "main.html";
     }, function(error) {
       // Handle Errors here.
       var errorCode = error.code;
@@ -88,7 +109,7 @@
       myPost.onSnapshot(doc => {
         const data = doc.data();
         console.log(data);
-      })
+      });
 
 
       myPost.get()

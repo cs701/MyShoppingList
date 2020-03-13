@@ -1,20 +1,4 @@
-var firebaseConfig = {
-    apiKey: "AIzaSyAcrEE3uznG_G3GTBvn52i_3wVOanj1C38",
-    authDomain: "my-shopping-list-71329.firebaseapp.com",
-    databaseURL: "https://my-shopping-list-71329.firebaseio.com",
-    projectId: "my-shopping-list-71329",
-    storageBucket: "my-shopping-list-71329.appspot.com",
-    messagingSenderId: "841683599724",
-    appId: "1:841683599724:web:6057e99e03992449ae7349",
-    measurementId: "G-Y3R7LVYJZL"
-};
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-firebase.analytics();
-
-
-var db = firebase.firestore();
 var checkedList = [];
 var sortKey = 'id';
 var items = [];
@@ -302,7 +286,6 @@ function loadAllList(argu) {
                 clearList();
                 document.getElementById("buttonWaitingList").className = "btn btn-sm btn-outline-secondary";
                 document.getElementById("buttonAll").className = "btn btn-sm btn-secondary";
-                console.log("I am here 2");
             })
             .then(function () {
                 renderList();
