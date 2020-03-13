@@ -2,13 +2,12 @@
 
 Task pending:
 
-- Ensure description is unique: Need to fix the cap/lower case issue (RongShi/Rui) 
 - Being able to change attributes (Rui/Xiran)
 - Security/Authentication (Asad/Sneha)
 - Merge login page with section id management (Sneha)
 - Style consistency
 - Database Security setup (Ryan /Jieqing)
- 
+- Make Item name first letter auto capital when adding to database
 
 
 Done:
@@ -23,4 +22,5 @@ Done:
 - Adding item with "Add more" button built to the main table list
 - Sortby button (Rongshi)
 - All/WaitingList button
+- Ensure unique
 

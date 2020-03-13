@@ -186,13 +186,9 @@ function addNewItem () {
     var newAddID;
     db.collection("Item").where('product', '==', pn).get().then((querySnapshot) => {
         if (querySnapshot.empty) {
-            db.collection("Item").add({
-                product: pn,
-                quantity: parseInt(po),
-                priority: parseInt(pr),
-                purchased: false,
-                deleted: false
-            }).then(function (docRef) {
+            db.collection("Item").withConverter(itemConverter)
+                .add(new Item(pn, parseInt(po), parseInt(pr), false, false))
+                .then(function (docRef) {
                 newAddID = docRef.id;
 
                 var table = document.getElementById("userItemList");
@@ -254,9 +250,34 @@ function addNewItem () {
             }).catch(function (error) {
                 console.log("Error adding document: ", error);
             });
+        } else {
+            var itemId = querySnapshot.docs[0].id;
+            var item = querySnapshot.docs[0].data();
+
+            if (item.deleted || item.purchased) {
+                item.deleted = false;
+                item.purchased = false;
+                item.quantity = parseInt(po);
+                item.priority = parseInt(pr);
+            } else {
+                item.quantity += parseInt(po);
+                item.priority = parseInt(pr);
+            }
+
+            db.collection("Item").doc(itemId)
+                .withConverter(itemConverter)
+                .set(item)
+                .then(function () {
+                    clearList();
+                })
+                .then(function () {
+                    loadAllList(listType);
+                    document.getElementById("addMoreButton").style.visibility = "visible"
+                });
+
+
         }
-        else
-            window.alert("Duplicate name!");
+
     })
 
 
@@ -314,6 +335,7 @@ function clearList() {
     while (table.rows.length > 1) {
         table.deleteRow(1);
     }
+
 
 }
 
