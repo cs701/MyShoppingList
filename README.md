@@ -2,13 +2,12 @@
 
 Task pending:
 
-- Being able to change attributes (Rui/Xiran)
-- Security/Authentication (Asad/Sneha)
-- Merge login page with section id management (Sneha)
+- Being able to change attributes (Rui/Xiran)   - Need to combine with current code we have
 - Style consistency
-- Database Security setup (Ryan /Jieqing)
-- Make Item name first letter auto capital when adding to database
-
+- Make Item name's first letter auto capital when adding to database
+- Fetch data based on UID
+- Test overall
+- Hosting on the web
 
 Done:
 
@@ -23,4 +22,6 @@ Done:
 - Sortby button (Rongshi)
 - All/WaitingList button
 - Ensure unique
+- Security/Authentication (Asad/Sneha)
+
 

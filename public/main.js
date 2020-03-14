@@ -85,7 +85,7 @@ function addMoreButton () {
     var newItemNumberInput = document.createElement('input');
 
     newItemNumberInput.type = 'input';
-    newItemNumberInput.form = 'form-control';
+    newItemNumberInput.className = 'form-control';
     newItemNumberInput.placeholder = 'Quantity';
     newItemNumberInput.name = "newItemNumberInput";
     newItemNumberInput.id = "newItemNumberInput";
@@ -344,12 +344,7 @@ function renderList() {
         var proName = product.product;
         var proQ = product.quantity;
         var proPurchased = product.purchased;
-        items.push({
-            priority: proP,
-            product: proName,
-            quantity: proQ,
-            proPurchased: proPurchased
-        });
+
         var row = table.insertRow(-1);
 
         var cell1 = row.insertCell(0);
@@ -481,7 +476,8 @@ function markDeleteFormDB (id) {
             item.markDeleted();
             db.collection("Item").doc(id)
                 .withConverter(itemConverter)
-                .set(item).then(function () {
+                .set(item)
+                .then(function () {
                 loadAllList(listType);
             });
 
