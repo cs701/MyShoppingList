@@ -1,6 +1,6 @@
 var uid = sessionStorage.getItem('uId');
 var checkedList = [];
-var sortKey = 'id';
+var sortKey = 'product';
 var items = [];
 var listType = 'not';
 document.getElementById("deleteButton").style.visibility = "hidden";
@@ -359,9 +359,9 @@ function renderList() {
 
     items.sort((a, b) => {
         if (a[sortKey] > b[sortKey]) {
-            return -1;
+            return 1;
         } else if (a[sortKey] < b[sortKey]) {
-            return 1
+            return -1
         }
         return 0;
     });
@@ -494,6 +494,7 @@ function clickPurchaseButton (id) {
 
 }
 
+var dealedChecked = 0;
 
 function deleteChecked () {
     checkedList.forEach(markDeleteFormDB);
@@ -501,7 +502,6 @@ function deleteChecked () {
 }
 
 function markDeleteFormDB (id) {
-    console.log(id);
     db.collection("Item").doc(id)
         .withConverter(itemConverter)
         .get().then(function (doc) {
@@ -510,13 +510,22 @@ function markDeleteFormDB (id) {
             item.markDeleted();
             db.collection("Item").doc(id)
                 .withConverter(itemConverter)
-                .set(item)
-                .then(function () {
-                loadAllList(listType);
-            });
+                .set(item).then(function () {
+                console.log("Delete item:" + id);
+                dealedChecked += 1;
+                //last one in the list finished
+                if (dealedChecked === checkedList.length) {
+                    loadAllList(listType);
+                    checkedList = [];
+                    dealedChecked = 0;
+                    document.getElementById("deleteButton").style.visibility = "hidden";
+                }
+            })
+
+
 
         } else {
-            console.log("No such document!")
+            console.log("Delete item: No such document!")
         }
     }).catch(function (error) {
         console.log("Error getting document:", error)

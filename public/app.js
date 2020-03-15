@@ -99,7 +99,7 @@ function signup(event) {
             //write to database
             db.collection("User").doc(uid).set({
                 fName: fName,
-                nName: lName,
+                lName: lName,
                 email: email
             }).then(function (refdoc) {
                 sessionStorage.setItem("uId", uid);

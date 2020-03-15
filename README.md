@@ -3,14 +3,13 @@
 Accounts available
 - demo@myshoppinglist.com  
 Password: 123456
-- test@test.com  
+- test@test.com   
 Password: 123456
 
 Task pending:
 
 - Log out Security (Asad/Sneha)
 - Deal with the register errors (Asad/Sneha)
-- Bug of reload issue when deleting an item (Rui)
 - Being able to change attributes (Rui/Xiran)   - Need to combine with current code we have
 - Test overall
 - Hosting on the web
