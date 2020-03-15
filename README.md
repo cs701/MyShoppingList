@@ -1,11 +1,17 @@
 # My Shopping List
 
+Accounts available
+- demo@myshoppinglist.com  
+Password: 123456
+- test@test.com  
+Password: 123456
+
 Task pending:
 
-- Load user info on main.html
-- Logout button
+- Log out Security (Asad/Sneha)
+- Deal with the register errors (Asad/Sneha)
+- Bug of reload issue when deleting an item (Rui)
 - Being able to change attributes (Rui/Xiran)   - Need to combine with current code we have
-- Style consistency
 - Test overall
 - Hosting on the web
 
@@ -22,8 +28,11 @@ Done:
 - Sortby button (Rongshi)
 - All/WaitingList button
 - Ensure unique
-- Security/Authentication (Asad/Sneha)
+- Authentication (Asad/Sneha)
 - Item name stored in lower case and when loading auto first letter capitalized
 - Fitch data based on uid
+- Load user info on main.html
+- create User in database
+- Logout button
 
 

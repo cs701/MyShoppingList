@@ -55,14 +55,19 @@
 <div class="container-fluid">
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-        <h1 class="h2">My List</h1>
+        <h1 class="h2" id="userFirstName"> My List</h1>
+
         <div class="btn-toolbar mb-2 mb-md-0">
 
             <div class="btn-states btn-group mr-2">
-                <button type="button" id="buttonWaitingList" class="btn btn-sm btn-secondary"
+                <button type="button" id="logoutButton" onclick="signOut()" class="btn btn-warning btn-sm">Not me? Log
+                    Out
+                </button>
+
+                <button type="button" id="buttonWaitingList" class="btn btn-secondary"
                         onclick="loadAllList('not')">Waiting List
                 </button>
-                <button type="button" id="buttonAll" class="btn btn-sm btn-outline-secondary"
+                <button type="button" id="buttonAll" class="btn btn-outline-secondary"
                         onclick="loadAllList('all')">All
                 </button>
             </div>

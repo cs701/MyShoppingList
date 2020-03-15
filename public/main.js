@@ -4,6 +4,15 @@ var sortKey = 'id';
 var items = [];
 var listType = 'not';
 document.getElementById("deleteButton").style.visibility = "hidden";
+document.getElementById("logoutButton").style.visibility = "hidden";
+
+
+if (!uid) {
+    window.location.href = "index.html";
+
+}
+
+loadUserInfo(uid);
 loadAllList(listType);
 
 
@@ -49,14 +58,22 @@ const itemConverter = {
     }
 };
 
+function loadUserInfo(id) {
 
-// var user = firebase.auth().currentUser;
-//
-// if (user) {
-//     window.alert(user.uid)
-// } else {
-//     window.alert("user not login")
-// }
+    db.collection("User").doc(id).get().then(function (doc) {
+        if (doc.exists) {
+            var currentUser = doc.data();
+            console.log("Current User: " + id + " -- fName:" + currentUser.fName);
+            $("#userFirstName").text(currentUser.fName + "'s Shopping List");
+            document.getElementById("logoutButton").style.visibility = "visible";
+        } else {
+            console.log("No such document!");
+        }
+    }).catch(function (error) {
+        console.log("Error getting document:", error);
+    });
+
+}
 
 
 function addMoreButton () {
@@ -178,7 +195,7 @@ function addNewItem () {
 
 
     var newAddID;
-    db.collection("Item").where('product', '==', pn).get().then((querySnapshot) => {
+    db.collection("Item").where('uid', '==', uid).where('product', '==', pn).get().then((querySnapshot) => {
         if (querySnapshot.empty) {
             db.collection("Item").withConverter(itemConverter)
                 .add(new Item(pn, parseInt(po), parseInt(pr), false, false, uid))

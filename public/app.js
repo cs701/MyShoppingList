@@ -15,13 +15,8 @@ firebase.analytics();
 
 
 var db = firebase.firestore();
+
 // Google authentication
-document.addEventListener("DOMContentLoaded", event => {
-
-    const app = firebase.app();
-    console.log(app);
-});
-
 function googleLogin() {
     const provider = new firebase.auth.GoogleAuthProvider();
 
@@ -46,14 +41,8 @@ function login(event) {
             firebase.auth().signInWithEmailAndPassword(email, password).then(function (result) {
                 user = result.user;
                 sessionStorage.setItem("uId", user.uid);
+                sessionStorage.setItem("uFName", user.uid);
                 window.location.href = "main.html";
-                var user = firebase.auth().currentUser;
-
-                if (user) {
-                    window.alert(user.uid)
-                } else {
-                    window.alert("user not login")
-                }
 
             }, function (error) {
                 // Handle Errors here.
@@ -62,7 +51,9 @@ function login(event) {
                 // [START_EXCLUDE]
                 if (errorCode == 'auth/weak-password') {
                     alert('The password is too weak.');
-                } else {
+                }
+                // TODO: login not successfull, better to have a pop up near the table instead of having a alert
+                else {
                     console.error(errorMessage);
                 }
             });
@@ -82,29 +73,50 @@ function signup(event) {
     var email = document.getElementById("emailId").value;
     var password = document.getElementById("pwd").value;
 
-    firebase.auth().createUserWithEmailAndPassword(email, password).then(function (result) {
-        user = result.user;
-        //document.write(`Hello ${user.email}`);
-        sessionStorage.setItem("uId", user.uid);
-        window.location.href = "main.html";
-    }, function (error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // [START_EXCLUDE]
-        if (errorCode == 'auth/weak-password') {
-            alert('The password is too weak.');
-        } else {
-            console.error(errorMessage);
-        }
-        // [END_EXCLUDE]
-    });
+
+    var fName = document.getElementById("register_form").fname.value;
+    var lName = document.getElementById("register_form").lname.value;
+
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(function (result) {
+            user = result.user;
+            uid = user.uid;
+        }, function (error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // [START_EXCLUDE]
+            if (errorCode == 'auth/weak-password') {
+                alert('The password is too weak.');
+            }
+            // TODO: the two passwords are not matching
+            else {
+                console.error(errorMessage);
+            }
+
+        })
+        .then(function () {
+            //write to database
+            db.collection("User").doc(uid).set({
+                fName: fName,
+                nName: lName,
+                email: email
+            }).then(function (refdoc) {
+                sessionStorage.setItem("uId", uid);
+                window.location.href = "main.html";
+            })
+        });
 
 }
 
 function signOut() {
+    sessionStorage.clear();
+    window.location.href = "index.html";
+    // TODO: deal with firebase auth when logout
     firebase.auth().signOut().then(function () {
         // Sign-out successful.
+
+
     }).catch(function (error) {
         // An error happened.
     });
