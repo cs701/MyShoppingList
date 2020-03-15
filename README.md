@@ -2,10 +2,10 @@
 
 Task pending:
 
+- Load user info on main.html
+- Logout button
 - Being able to change attributes (Rui/Xiran)   - Need to combine with current code we have
 - Style consistency
-- Make Item name's first letter auto capital when adding to database
-- Fetch data based on UID
 - Test overall
 - Hosting on the web
 
@@ -23,5 +23,7 @@ Done:
 - All/WaitingList button
 - Ensure unique
 - Security/Authentication (Asad/Sneha)
+- Item name stored in lower case and when loading auto first letter capitalized
+- Fitch data based on uid
 
 

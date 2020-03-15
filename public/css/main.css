@@ -13,6 +13,11 @@
 .btnPurchaseLine {
     color: white;
 }
+
+
+.capitalize {
+    text-transform: capitalize;
+}
 /*tr.strikeout td:before {*/
 /*    content: " ";*/
 /*    position: absolute;*/

@@ -1,21 +1,21 @@
-
+var uid = sessionStorage.getItem('uId');
 var checkedList = [];
 var sortKey = 'id';
 var items = [];
 var listType = 'not';
 document.getElementById("deleteButton").style.visibility = "hidden";
-
 loadAllList(listType);
 
 
 //object Item
 class Item {
-    constructor(product, quantity, prioirty, purchased, deleted) {
+    constructor(product, quantity, prioirty, purchased, deleted, uid) {
         this.product = product;
         this.quantity = quantity;
         this.priority = prioirty;
         this.purchased = purchased;
         this.deleted = deleted;
+        this.uid = uid;
     }
 
     toString () {
@@ -39,14 +39,24 @@ const itemConverter = {
             quantity: item.quantity,
             priority: item.priority,
             purchased: item.purchased,
-            deleted: item.deleted
+            deleted: item.deleted,
+            uid: item.uid
         }
     },
     fromFirestore: function (snapshot, options) {
         const data = snapshot.data(options);
-        return new Item(data.product, data.quantity, data.priority, data.purchased, data.deleted)
+        return new Item(data.product, data.quantity, data.priority, data.purchased, data.deleted, data.uid)
     }
 };
+
+
+// var user = firebase.auth().currentUser;
+//
+// if (user) {
+//     window.alert(user.uid)
+// } else {
+//     window.alert("user not login")
+// }
 
 
 function addMoreButton () {
@@ -155,7 +165,7 @@ function addNewItem () {
 
 
     var pr = document.getElementById("newItemPrioritySelect").value;
-    var pn = document.getElementById("newItemNameInput").value;
+    var pn = document.getElementById("newItemNameInput").value.toLowerCase();
     var po = document.getElementById("newItemNumberInput").value;
 
     if (!pn) {
@@ -171,7 +181,7 @@ function addNewItem () {
     db.collection("Item").where('product', '==', pn).get().then((querySnapshot) => {
         if (querySnapshot.empty) {
             db.collection("Item").withConverter(itemConverter)
-                .add(new Item(pn, parseInt(po), parseInt(pr), false, false))
+                .add(new Item(pn, parseInt(po), parseInt(pr), false, false, uid))
                 .then(function (docRef) {
                 newAddID = docRef.id;
 
@@ -199,8 +209,12 @@ function addNewItem () {
                 //purchasedButton.innerHTML = '<i class="material-icons md-24">done</i>';
                 purchasedButton.innerHTML = "&#x2713";
 
+                    var temp = document.createElement('html');
+                    temp.className = 'capitalize';
+                    temp.innerHTML = pn;
+
                 cell1.appendChild(checkbox);
-                cell2.appendChild(document.createTextNode(pn));
+                    cell2.appendChild(temp);
                 cell3.appendChild(document.createTextNode(po));
                 cell4.appendChild(document.createTextNode(checkPirority(pr)));
                 cell5.appendChild(purchasedButton);
@@ -275,7 +289,7 @@ function loadAllList(argu) {
 
     if (listType === 'all') {
 
-        db.collection("Item").where("deleted", "==", false)
+        db.collection("Item").where("uid", "==", uid).where("deleted", "==", false)
             .get()
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
@@ -292,7 +306,7 @@ function loadAllList(argu) {
             });
 
     } else {
-        db.collection("Item").where("deleted", "==", false).where("purchased", "==", false)
+        db.collection("Item").where("uid", "==", uid).where("deleted", "==", false).where("purchased", "==", false)
             .get()
             .then(function (querySnapshot) {
                 querySnapshot.forEach(function (doc) {
@@ -372,13 +386,15 @@ function renderList() {
         cell4.appendChild(document.createTextNode(proPriority));
         cell2.id = "cell_" + proId;
 
+        var temp = document.createElement("html");
+        temp.className = 'capitalize';
 
         if (proPurchased) {
-            var temp = document.createElement("html");
             temp.innerHTML = proName.strike();
             cell2.appendChild(temp);
         } else {
-            cell2.appendChild(document.createTextNode(proName));
+            temp.innerHTML = proName;
+            cell2.appendChild(temp);
             purchasedButton.addEventListener("click", function () {
                 clickPurchaseButton(proId);
             });
@@ -435,6 +451,7 @@ function clickPurchaseButton (id) {
 
     var content = document.getElementById("cell_" + id);
     content.innerHTML = content.textContent.strike();
+    content.className = 'capitalize';
 
     document.getElementById("button_" + id).remove();
 
