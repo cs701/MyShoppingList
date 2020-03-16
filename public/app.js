@@ -41,7 +41,6 @@ function login(event) {
             firebase.auth().signInWithEmailAndPassword(email, password).then(function (result) {
                 user = result.user;
                 sessionStorage.setItem("uId", user.uid);
-                sessionStorage.setItem("uFName", user.uid);
                 window.location.href = "main.html";
 
             }, function (error) {
@@ -49,13 +48,9 @@ function login(event) {
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 // [START_EXCLUDE]
-                if (errorCode == 'auth/weak-password') {
-                    alert('The password is too weak.');
-                }
-                // TODO: login not successfull, better to have a pop up near the table instead of having a alert
-                else {
-                    console.error(errorMessage);
-                }
+                document.getElementById("login-alert").innerText = errorMessage;
+                $("#login-alert").show();
+
             });
 
         })
@@ -70,12 +65,20 @@ function login(event) {
 
 function signup(event) {
     event.preventDefault();
-    var email = document.getElementById("emailId").value;
-    var password = document.getElementById("pwd").value;
+
+    var email = document.getElementById("reg_email").value;
+    var password = document.getElementById("reg_psw").value;
+    var password_r = document.getElementById("reg_psw_repeat").value;
+
+    if (password != password_r) {
+        document.getElementById("register-alert").innerText = "The repeated password is not matching";
+        $("#register-alert").show();
+        return;
+    }
 
 
-    var fName = document.getElementById("register_form").fname.value;
-    var lName = document.getElementById("register_form").lname.value;
+    var fName = document.getElementById("register_form").reg_fname.value;
+    var lName = document.getElementById("register_form").reg_lname.value;
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(function (result) {
@@ -86,13 +89,9 @@ function signup(event) {
             var errorCode = error.code;
             var errorMessage = error.message;
             // [START_EXCLUDE]
-            if (errorCode == 'auth/weak-password') {
-                alert('The password is too weak.');
-            }
-            // TODO: the two passwords are not matching
-            else {
-                console.error(errorMessage);
-            }
+            document.getElementById("register-alert").innerText = errorMessage;
+            $("#register-alert").show();
+
 
         })
         .then(function () {
@@ -110,13 +109,11 @@ function signup(event) {
 }
 
 function signOut() {
-    sessionStorage.clear();
-    window.location.href = "index.html";
-    // TODO: deal with firebase auth when logout
+
     firebase.auth().signOut().then(function () {
         // Sign-out successful.
-
-
+        sessionStorage.clear();
+        window.location.href = "index.html";
     }).catch(function (error) {
         // An error happened.
     });

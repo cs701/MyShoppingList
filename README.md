@@ -33,5 +33,3 @@ Done:
 - Load user info on main.html
 - create User in database
 - Logout button
-
-
