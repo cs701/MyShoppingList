@@ -23,7 +23,7 @@ function googleLogin() {
     firebase.auth().signInWithPopup(provider)
 
         .then(function (result) {
-            var user = result.user;
+            user = result.user;
             uid = user.uid;
         }, function (error) {
             // Handle Errors here.
@@ -56,7 +56,7 @@ function login(event) {
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
         .then(function () {
             firebase.auth().signInWithEmailAndPassword(email, password).then(function (result) {
-                var user = result.user;
+                user = result.user;
                 sessionStorage.setItem("uId", user.uid);
                 window.location.href = "main.html";
 
@@ -99,7 +99,7 @@ function signup(event) {
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(function (result) {
-            var user = result.user;
+            user = result.user;
             uid = user.uid;
         }, function (error) {
             // Handle Errors here.
