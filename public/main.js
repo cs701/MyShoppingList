@@ -38,6 +38,22 @@ class Item {
     markDeleted () {
         this.deleted = true;
     }
+
+    changeQuantity(op) {
+        if (op == 0) {  //plus
+            this.quantity += 1;
+        } else if (op == 1) {
+            this.quantity -= 1;
+        }
+    }
+
+    setName(name) {
+        this.product = name;
+    }
+
+    setPrior(p) {
+        this.priority = p;
+    }
 }
 
 // Firestore data converter
@@ -230,10 +246,125 @@ function addNewItem () {
                     temp.className = 'capitalize';
                     temp.innerHTML = pn;
 
+                    //edited by Xiran
+                    var prior = document.createElement("div");
+                    prior.id = "div_" + newAddID;
+                    switch (parseInt(pr)) {
+                        case 0:
+                            prior.style = 'width:30px;height:30px;background-color:green;border-radius:50%';
+                            break;
+                        case 1:
+                            prior.style = 'width:30px;height:30px;background-color:yellow;border-radius:50%';
+                            break;
+                        case 2:
+                            prior.style = 'width:30px;height:30px;background-color:red;border-radius:50%';
+                            break;
+                    }
+                    var plusButton = document.createElement('button');
+
+                    plusButton.type = "button";
+                    plusButton.className = 'btn btn-secondary btn-sm';
+                    plusButton.name = "pbutton_" + newAddID;
+                    plusButton.id = "pbutton_" + newAddID;
+                    plusButton.innerHTML = "+";
+
+                    var minusButton = document.createElement('button');
+
+                    minusButton.type = "button";
+                    minusButton.className = 'btn btn-secondary btn-sm';
+                    minusButton.name = "mbutton_" + newAddID;
+                    minusButton.id = "mbutton_" + newAddID;
+                    minusButton.innerHTML = "-";
+
+                    var itemNameInput = document.createElement('input');
+
+                    itemNameInput.type = 'input';
+                    itemNameInput.className = 'form-control';
+                    itemNameInput.placeholder = pn;
+
+                    itemNameInput.style = 'display:none';
+
+                    var doneButton = document.createElement('button');
+
+                    doneButton.type = "button";
+                    doneButton.className = 'btn btn-secondary btn-sm';
+                    doneButton.name = "dbutton_" + newAddID;
+                    doneButton.id = "dbutton_" + newAddID;
+                    doneButton.innerHTML = "Done";
+                    doneButton.style = 'display:none';
+
+                    var itemPrioritySelect = document.createElement('select');
+
+                    itemPrioritySelect.type = 'input';
+                    itemPrioritySelect.className = 'form-control custom-select';
+                    itemPrioritySelect.name = "newPriority_" + newAddID;
+                    itemPrioritySelect.id = "newPriority_" + newAddID;
+                    itemPrioritySelect.style = 'display:none';
+
+                    var pOption1 = document.createElement('option');
+                    pOption1.value = "2";
+                    pOption1.appendChild(document.createTextNode("Priority"));
+
+                    var pOption2 = document.createElement('option');
+                    pOption2.value = "0";
+                    pOption2.appendChild(document.createTextNode("Low"));
+
+                    var pOption3 = document.createElement('option');
+                    pOption3.value = "1";
+                    pOption3.appendChild(document.createTextNode("Medium"));
+
+                    var pOption4 = document.createElement('option');
+                    pOption4.value = "2";
+                    pOption4.appendChild(document.createTextNode("High"));
+
+
+                    itemPrioritySelect.appendChild(pOption1);
+                    itemPrioritySelect.appendChild(pOption2);
+                    itemPrioritySelect.appendChild(pOption3);
+                    itemPrioritySelect.appendChild(pOption4);
+
+                    var priorButton = document.createElement('button');
+
+                    priorButton.type = "button";
+                    priorButton.className = 'btn btn-secondary btn-sm';
+                    priorButton.name = "prbutton_" + newAddID;
+                    priorButton.id = "prbutton_" + newAddID;
+                    priorButton.innerHTML = "Done";
+                    priorButton.style = 'display:none';
+
                 cell1.appendChild(checkbox);
+
+                    cell4.appendChild(prior);
+                    cell3.appendChild(plusButton);
+                    cell3.appendChild(document.createTextNode(' ' + po + ' '));
+                    cell3.appendChild(minusButton);
+                    plusButton.addEventListener("click", () => {
+                        changeQuan(0, newAddID);
+                    });
+                    minusButton.addEventListener("click", () => {
+                        changeQuan(1, newAddID);
+                    });
+
+                    var nameNode = document.createElement("html");
+                    nameNode.innerHTML = pn;
+                    nameNode.addEventListener("click", () => {
+                        edit(newAddID);
+                    });
                     cell2.appendChild(temp);
-                cell3.appendChild(document.createTextNode(po));
-                cell4.appendChild(document.createTextNode(checkPirority(pr)));
+                    cell2.appendChild(itemNameInput);
+                    cell2.appendChild(doneButton);
+                    cell4.appendChild(itemPrioritySelect);
+                    cell4.appendChild(priorButton);
+                    prior.addEventListener("click", () => {
+                        changePrior(newAddID);
+                    });
+                    doneButton.addEventListener("click", () => {
+                        editDone(newAddID);
+                    });
+
+
+                    //edited by Xiran
+
                 cell5.appendChild(purchasedButton);
 
                 cell2.id = "cell_" + newAddID;
@@ -398,20 +529,132 @@ function renderList() {
         purchasedButton.id = "button_" + proId;
         purchasedButton.innerHTML = "&#x2713";
 
+
+        //edited by Xiran
+        var prior = document.createElement("div");
+        prior.id = "div_" + proId;
+        switch (proP) {
+            case 0:
+                prior.style = 'width:30px;height:30px;background-color:green;border-radius:50%';
+                break;
+            case 1:
+                prior.style = 'width:30px;height:30px;background-color:yellow;border-radius:50%';
+                break;
+            case 2:
+                prior.style = 'width:30px;height:30px;background-color:red;border-radius:50%';
+                break;
+        }
+        var plusButton = document.createElement('button');
+
+        plusButton.type = "button";
+        plusButton.className = 'btn btn-secondary btn-sm';
+        plusButton.name = "pbutton_" + proId;
+        plusButton.id = "pbutton_" + proId;
+        plusButton.innerHTML = "+";
+
+        var minusButton = document.createElement('button');
+
+        minusButton.type = "button";
+        minusButton.className = 'btn btn-secondary btn-sm';
+        minusButton.name = "mbutton_" + proId;
+        minusButton.id = "mbutton_" + proId;
+        minusButton.innerHTML = "-";
+
+        var itemNameInput = document.createElement('input');
+
+        itemNameInput.type = 'input';
+        itemNameInput.className = 'form-control';
+        itemNameInput.placeholder = proName;
+
+        itemNameInput.style = 'display:none';
+
+        var doneButton = document.createElement('button');
+
+        doneButton.type = "button";
+        doneButton.className = 'btn btn-secondary btn-sm';
+        doneButton.name = "dbutton_" + proId;
+        doneButton.id = "dbutton_" + proId;
+        doneButton.innerHTML = "Done";
+        doneButton.style = 'display:none';
+
+        var itemPrioritySelect = document.createElement('select');
+
+        itemPrioritySelect.type = 'input';
+        itemPrioritySelect.className = 'form-control custom-select';
+        itemPrioritySelect.name = "newPriority_" + proId;
+        itemPrioritySelect.id = "newPriority_" + proId;
+        itemPrioritySelect.style = 'display:none';
+
+        var pOption1 = document.createElement('option');
+        pOption1.value = "2";
+        pOption1.appendChild(document.createTextNode("Priority"));
+
+        var pOption2 = document.createElement('option');
+        pOption2.value = "0";
+        pOption2.appendChild(document.createTextNode("Low"));
+
+        var pOption3 = document.createElement('option');
+        pOption3.value = "1";
+        pOption3.appendChild(document.createTextNode("Medium"));
+
+        var pOption4 = document.createElement('option');
+        pOption4.value = "2";
+        pOption4.appendChild(document.createTextNode("High"));
+
+
+        itemPrioritySelect.appendChild(pOption1);
+        itemPrioritySelect.appendChild(pOption2);
+        itemPrioritySelect.appendChild(pOption3);
+        itemPrioritySelect.appendChild(pOption4);
+
+        var priorButton = document.createElement('button');
+
+        priorButton.type = "button";
+        priorButton.className = 'btn btn-secondary btn-sm';
+        priorButton.name = "prbutton_" + proId;
+        priorButton.id = "prbutton_" + proId;
+        priorButton.innerHTML = "Done";
+        priorButton.style = 'display:none';
+
+
+        //new by Xiran
         cell1.appendChild(checkbox);
-        cell3.appendChild(document.createTextNode(proQ));
-        cell4.appendChild(document.createTextNode(proPriority));
+        cell4.appendChild(prior);
         cell2.id = "cell_" + proId;
 
         var temp = document.createElement("html");
         temp.className = 'capitalize';
 
         if (proPurchased) {
+            cell3.appendChild(document.createTextNode(proQ));
+
             temp.innerHTML = proName.strike();
             cell2.appendChild(temp);
         } else {
             temp.innerHTML = proName;
+            temp.addEventListener("click", () => {
+                edit(proId);
+            });
             cell2.appendChild(temp);
+            cell2.appendChild(itemNameInput);
+            cell2.appendChild(doneButton);
+            cell4.appendChild(itemPrioritySelect);
+            cell4.appendChild(priorButton);
+            prior.addEventListener("click", () => {
+                changePrior(proId);
+            });
+            doneButton.addEventListener("click", () => {
+                editDone(proId);
+            });
+            cell3.appendChild(plusButton);
+            cell3.appendChild(document.createTextNode(' ' + proQ + ' '));
+            cell3.appendChild(minusButton);
+            plusButton.addEventListener("click", () => {
+                changeQuan(0, proId);
+            });
+            minusButton.addEventListener("click", () => {
+                changeQuan(1, proId);
+            });
             purchasedButton.addEventListener("click", function () {
                 clickPurchaseButton(proId);
             });
@@ -466,9 +709,13 @@ function isEmptyList (list) {
 
 function clickPurchaseButton (id) {
 
-    var content = document.getElementById("cell_" + id);
+    var content = document.getElementById("cell_" + id).firstChild;
     content.innerHTML = content.textContent.strike();
     content.className = 'capitalize';
+    var mbutton = document.getElementById("mbutton_" + id);
+    mbutton.style = 'display:none';
+    var pbutton = document.getElementById("pbutton_" + id);
+    pbutton.style = 'display:none';
 
     document.getElementById("button_" + id).remove();
 
@@ -540,6 +787,127 @@ function sortBy (key) {
 
 }
 
+//edited by Xiran
+function changeQuan(op, id) {
+    var quan = document.getElementById("pbutton_" + id).nextSibling.textContent.trim();
+    if (quan == 1 && op == 1) {
+        addToList(id, checkedList);
+        deleteChecked();
+
+    } else {
+        var item;
+
+        db.collection("Item").doc(id)
+            .withConverter(itemConverter)
+            .get().then(function (doc) {
+            if (doc.exists) {
+                item = doc.data();
+                item.changeQuantity(op);
+                db.collection("Item").doc(id)
+                    .withConverter(itemConverter)
+                    .set(item).then(function () {
+                    window.location.reload();
+                });
+
+            } else {
+                console.log("No such document!")
+            }
+        }).catch(function (error) {
+            console.log("Error getting document:", error)
+        });
+    }
+
+
+}
+
+function edit(id) {
+    console.log(id);
+    var nameCell = document.getElementById('cell_' + id).firstChild;
+    nameCell.style = 'display:none';
+    nameCell.nextSibling.style = 'display:true';
+    nameCell.nextSibling.nextSibling.style = 'display:true';
+
+}
+
+function editDone(id) {
+    var editName = document.getElementById('cell_' + id).firstChild.nextSibling.value;
+    db.collection("Item").where('uid', '==', uid).where('product', '==', editName).get().then((querySnapshot) => {
+        if (querySnapshot.empty) {
+            if (isNull(editName)) {
+                alert("The item name can't be null!");
+            } else {
+                var item;
+
+                db.collection("Item").doc(id)
+                    .withConverter(itemConverter)
+                    .get().then(function (doc) {
+                    if (doc.exists) {
+                        item = doc.data();
+                        item.setName(editName);
+                        db.collection("Item").doc(id)
+                            .withConverter(itemConverter)
+                            .set(item).then(function () {
+                            window.location.reload();
+                        });
+
+                    } else {
+                        console.log("No such document!")
+                    }
+                }).catch(function (error) {
+                    console.log("Error getting document:", error)
+                });
+            }
+        } else {
+            alert("The item name exists!");
+        }
+    });
+
+
+}
+
+function changePrior(id) {
+    var priorDiv = document.getElementById("div_" + id);
+    console.log(priorDiv.nextSibling);
+    priorDiv.style = 'display:none';
+    priorDiv.nextSibling.style = 'display:true';
+    priorDiv.nextSibling.nextSibling.style = 'display:true';
+    priorDiv.nextSibling.nextSibling.addEventListener('click', () => {
+        changePriorDone(id);
+    });
+}
+
+function changePriorDone(id) {
+    var changePrior = parseInt(document.getElementById('newPriority_' + id).value);
+    var item;
+
+    db.collection("Item").doc(id)
+        .withConverter(itemConverter)
+        .get().then(function (doc) {
+        if (doc.exists) {
+            item = doc.data();
+            item.setPrior(changePrior);
+            db.collection("Item").doc(id)
+                .withConverter(itemConverter)
+                .set(item).then(function () {
+                window.location.reload();
+            });
+
+        } else {
+            console.log("No such document!")
+        }
+    }).catch(function (error) {
+        console.log("Error getting document:", error)
+    });
+}
+
+function isNull(str) {
+    if (str == "") return true;
+    var regu = "^[ ]+$";
+    var re = new RegExp(regu);
+    return re.test(str);
+}
+
+//edited by Xiran
 
 $(function () {
     $('#addItem').popover({
