@@ -22,12 +22,29 @@ function googleLogin() {
 
     firebase.auth().signInWithPopup(provider)
 
-        .then(result => {
-            const user = result.user;
-            document.write(`Hello ${user.displayName}`);
-            console.log(user)
+        .then(function (result) {
+            var user = result.user;
+            uid = user.uid;
+        }, function (error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // [START_EXCLUDE]
+            document.getElementById("register-alert").innerText = errorMessage;
+            $("#register-alert").show();
+
+
         })
-        .catch(console.log)
+        .then(function () {
+            //write to database
+            db.collection("User").doc(uid).set({
+                fName: user.displayName,
+                email: user.email
+            }).then(function (refdoc) {
+                sessionStorage.setItem("uId", uid);
+                window.location.href = "main.html";
+            })
+        });
 
 }
 
@@ -39,7 +56,7 @@ function login(event) {
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
         .then(function () {
             firebase.auth().signInWithEmailAndPassword(email, password).then(function (result) {
-                user = result.user;
+                var user = result.user;
                 sessionStorage.setItem("uId", user.uid);
                 window.location.href = "main.html";
 
@@ -82,7 +99,7 @@ function signup(event) {
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(function (result) {
-            user = result.user;
+            var user = result.user;
             uid = user.uid;
         }, function (error) {
             // Handle Errors here.
