@@ -8,11 +8,8 @@ Password: 123456
 
 Task pending:
 
-- Log out Security (Asad/Sneha)
-- Deal with the register errors (Asad/Sneha)
 - Being able to change attributes (Rui/Xiran)   - Need to combine with current code we have
 - Test overall
-- Hosting on the web
 
 Done:
 
@@ -28,8 +25,13 @@ Done:
 - All/WaitingList button
 - Ensure unique
 - Authentication (Asad/Sneha)
+- Register/login (Asad/Sneha)
 - Item name stored in lower case and when loading auto first letter capitalized
 - Fitch data based on uid
 - Load user info on main.html
 - create User in database
-- Logout button
+- login/register errors
+- Log out button
+- Log out Security
+- Google login
+- Web hosting
